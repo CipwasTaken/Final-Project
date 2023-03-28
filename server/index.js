@@ -3,7 +3,7 @@
 const express = require("express");
 const morgan = require("morgan");
 
-const {blogPost, getBlogPosts, updateBlogPost, deleteBlogPost} = require("./handlers/blogpost")
+const {blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost} = require("./handlers/blogpost")
 
 const PORT = 4000;
 
@@ -26,11 +26,13 @@ express()
   .use("/", express.static(__dirname + "/"))
 
   .get("/api/blogpost/", getBlogPosts)
+  .get("/api/blogpost/recent", getMostRecentPost)
 
   .post("/api/blogpost/", blogPost)
 
   .patch("/api/blogpost/:id", updateBlogPost)
 
   .delete("/api/blogpost/:id", deleteBlogPost)
+
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
