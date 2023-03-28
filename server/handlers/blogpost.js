@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient} = require("mongodb");
 require("dotenv").config();
 
 const { MONGO_URI } = process.env;
@@ -27,19 +27,58 @@ const blogPost = async (req, res) => {
 }
 
 const getBlogPosts = async (req, res) => {
-    const client = new MongoClient(MONGO_URI, options);
-  
-    try {
-      await client.connect();
-      const db = client.db("LND");
-      const blogPosts = await db.collection("blogposts").find().toArray();
-      res.status(200).json(blogPosts);
-    } catch (err) {
-      console.log("Error:", err);
-      res.status(500).json({ status: 500, message: "Internal server error" });
-    } finally {
-      client.close();
-    }
-  };
+const client = new MongoClient(MONGO_URI, options);
 
-module.exports = { blogPost, getBlogPosts };
+try {
+    await client.connect();
+    const db = client.db("LND");
+    const blogPosts = await db.collection("blogposts").find().toArray();
+    res.status(200).json(blogPosts);
+} catch (err) {
+    console.log("Error:", err);
+    res.status(500).json({ status: 500, message: "Internal server error" });
+} finally {
+    client.close();
+}
+};
+
+const updateBlogPost = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+try {
+    await client.connect();
+    const db = client.db("LND");
+    const { id } = req.params;
+    const { content } = req.body;
+    const result = await db.collection("blogposts").updateOne({ _id: id}, { $set: { content } });
+    if (result.modifiedCount === 0) {
+    res.status(404).json({ status: 404, message: "Blog post not found" });
+    } else {
+    res.status(200).json({ status: 200, message: "Blog post updated" });
+    }
+} catch (err) {
+    console.log("Error:", err);
+    res.status(500).json({ status: 500, message: "Internal server error" });
+} finally {
+    client.close();
+}
+};
+
+const deleteBlogPost = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    try{
+        
+        await client.connect()
+        const db = client.db("LND")
+        const { id } = req.params;
+        const result = await db.collection("blogposts").deleteOne({ _id: id });
+        console.log(result);
+        res.status(200).json({status: 200, message: "Blog post deleted"});
+    } catch (err) {
+        console.log("Error:", err);
+        res.status(500).json({status: 500, message: "Internal server error"});
+    } finally {
+        client.close()
+    }
+}
+
+module.exports = { blogPost, getBlogPosts, updateBlogPost, deleteBlogPost };
