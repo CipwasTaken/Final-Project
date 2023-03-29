@@ -1,4 +1,5 @@
 const { MongoClient} = require("mongodb");
+const moment = require("moment")
 require("dotenv").config();
 
 const { MONGO_URI } = process.env;
@@ -16,7 +17,8 @@ const blogPost = async (req, res) => {
         const db = client.db("LND")
         const _id = uuidv4();
         const {content} = req.body;
-        await db.collection("blogposts").insertOne({_id, content})
+        const date = moment().format("MMM Do YYYY, h:mm a")
+        await db.collection("blogposts").insertOne({_id, content, date})
         res.status(200).json({status: 200, message: "Blog Post Created!"})
     } catch (err) {
         console.log("Error:", err);
@@ -81,4 +83,21 @@ const deleteBlogPost = async (req, res) => {
     }
 }
 
-module.exports = { blogPost, getBlogPosts, updateBlogPost, deleteBlogPost };
+
+
+const getMostRecentPost = async (req, res) => {
+const client = new MongoClient(MONGO_URI, options);
+try {
+    await client.connect();
+    const db = client.db("LND");
+    const mostRecentPost = await db.collection("blogposts").find().sort({ date: -1 }).limit(1).toArray();
+    res.status(200).json({ status: 200, message: mostRecentPost});
+} catch (err) {
+    console.log(err);
+    res.status(500).json({ status: 500, message: "Internal server error" });
+} finally {
+    client.close();
+}
+};
+
+module.exports = { blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost};
