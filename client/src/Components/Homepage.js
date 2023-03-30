@@ -1,8 +1,7 @@
 import {NavLink} from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-
-// const banner = "/Late night Digest.png"
+import GlobalStyle from "./GlobalStyles"
 
 
 
@@ -21,7 +20,7 @@ useEffect(() => {
         <>
             <Main>
                 <BannerDiv>
-                    <Img src="/Late-night-digest.png" alt="site banner" />
+                    <Img src="/banner.jpg" alt="site banner" />
                 </BannerDiv>
                 <BlogDiv>
                     {mostRecentPost && (
@@ -39,13 +38,18 @@ useEffect(() => {
 
 export default Home
 
-const Main = styled.div``
-
-const BannerDiv = styled.div`
+const Main = styled.div`
 display: flex;
 flex-direction: column;
-align-items: center;
-height: 20em;
+border: 2px solid #8DA7BE;
+`
+
+const NavBar = styled.div`
+
+`
+
+const BannerDiv = styled.div`
+
 `
 
 const Img = styled.img`
@@ -54,6 +58,6 @@ width: 100%;
 `
 
 const BlogDiv = styled.div`
-
-background-color: gray;
+color: white;
+background-color: #603601;
 `
