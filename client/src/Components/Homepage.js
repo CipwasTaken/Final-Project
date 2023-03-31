@@ -2,18 +2,23 @@ import {NavLink} from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import GlobalStyle from "./GlobalStyles"
-import NavigationBar from "./NavBar"
+import LoadingSpinner from "./LoadingSpinner"
+
 
 const coffee = "./img.jpg"
 
 
 function Home () {
     const [mostRecentPost, setMostRecentPost] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
 useEffect(() => {
     fetch('/api/blogpost/recent')
         .then((res) => res.json())
-        .then(data => setMostRecentPost(data.message[0]))
+        .then(data => {
+            setMostRecentPost(data.message[0]);
+            setIsLoading(false);
+        })
         .catch(error => console.error(error))
 }, [])
 
@@ -25,31 +30,34 @@ const handleClick = () => {
     return (
         <>
             <Main>
-                <NavDiv>
-                    <NavigationBar />
-                </NavDiv>
-                <ContentDiv>
-                    <BlogDiv>
-                        {mostRecentPost && (
-                            <div>
-                                <PostContent>{mostRecentPost.content}</PostContent>
-                                <Posttime>{mostRecentPost.date}</Posttime>
-                            </div>
-                        )}
-                    </BlogDiv>
-                    <About>
-                        <ImgDiv>
-                            <Img src={coffee} />
-                        </ImgDiv>
-                        <TextDiv>
-                            <h1>Late Night Digest</h1>
-                            <p>Just our opinions/takes on a variety of different topics and issues.</p>
-                            <Button onClick={handleClick}>
-                                Subscribe to our YouTube Channel!
-                            </Button>
-                        </TextDiv>
-                    </About>
-                </ContentDiv>
+                {isLoading ? (
+                    <LoadingDiv><LoadingSpinner /></LoadingDiv>
+                ) : (
+                    <ContentDiv>
+                        <Nav to="/blog">
+                            <BlogDiv>
+                                {mostRecentPost && (
+                                    <div>
+                                        <PostContent>{mostRecentPost.content}</PostContent>
+                                        <Posttime>{mostRecentPost.date}</Posttime>
+                                    </div>
+                                )}
+                            </BlogDiv>
+                        </Nav>
+                        <About>
+                            <ImgDiv>
+                                <Img src={coffee} />
+                            </ImgDiv>
+                            <TextDiv>
+                                <h1>Late Night Digest</h1>
+                                <p>Just our opinions/takes on a variety of different topics and issues.</p>
+                                <Button onClick={handleClick}>
+                                    Subscribe to our YouTube Channel!
+                                </Button>
+                            </TextDiv>
+                        </About>
+                    </ContentDiv>
+                )}
             </Main>
         </>
     )
@@ -61,8 +69,20 @@ export default Home
 const Main = styled.div`
 display: flex;
 flex-direction: column;
-height: 100vh;
+height: 90vh;
 `
+
+const LoadingDiv = styled.div`
+display: flex;
+justify-content: center;
+`
+
+const Nav = styled(NavLink)`
+text-decoration: none;
+width: 40%;
+height: 5em;
+`
+
 const ContentDiv = styled.div`
 display: flex;
 flex-direction: row;
@@ -72,13 +92,13 @@ height: 100%;
 const BlogDiv = styled.div`
 color: white;
 background-color: #D0B8A8;
-width: 40%;
-height: 5em;
-padding: 2em
+padding: 2em;
+flex-grow: 1;
 `
+
 const PostContent = styled.p`
 font-size: 18px;
-color: black
+color: black;
 `
 
 const Posttime = styled.p`
