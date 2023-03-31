@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         line-height: 1;
-        background-color: #cc9544;
+        background-color: #F8EDE3;
         font-family: 'Roboto', sans-serif;;
     }
     ol, ul {

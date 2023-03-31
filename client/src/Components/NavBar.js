@@ -22,16 +22,6 @@ const NavigationBar = () => {
         </Nav>
         <Nav>
           <div>
-            <Text>Members</Text>
-          </div>
-        </Nav>
-        <Nav>
-          <div>
-            <Text>About us</Text>
-          </div>
-        </Nav>
-        <Nav>
-          <div>
             <Text>Blog</Text>
           </div>
         </Nav>
@@ -71,7 +61,6 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  position: fixed;
   width: 100%;
   display: flex;
   background-color: #7D6E83;
