@@ -17,8 +17,9 @@ const blogPost = async (req, res) => {
         const db = client.db("LND")
         const _id = uuidv4();
         const {content} = req.body;
-        const date = moment().format("MMM Do YYYY, h:mm a")
-        await db.collection("blogposts").insertOne({_id, content, date})
+        const date = moment().format("YYYY-MM-DD, h:mm a")
+        const dateTime = moment().toISOString();
+        await db.collection("blogposts").insertOne({_id, content, date, dateTime})
         res.status(200).json({status: 200, message: "Blog Post Created!"})
     } catch (err) {
         console.log("Error:", err);
@@ -83,14 +84,12 @@ const deleteBlogPost = async (req, res) => {
     }
 }
 
-
-
 const getMostRecentPost = async (req, res) => {
 const client = new MongoClient(MONGO_URI, options);
 try {
     await client.connect();
     const db = client.db("LND");
-    const mostRecentPost = await db.collection("blogposts").find().sort({ date: -1 }).limit(1).toArray();
+    const mostRecentPost = await db.collection("blogposts").find().sort({ dateTime: -1 }).limit(1).toArray();
     res.status(200).json({ status: 200, message: mostRecentPost});
 } catch (err) {
     console.log(err);
@@ -100,4 +99,24 @@ try {
 }
 };
 
-module.exports = { blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost};
+const getBlogPostById = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    try {
+        await client.connect();
+        const db = client.db("LND");
+        const id = req.params.id;
+        const blogPost = await db.collection("blogposts").findOne({ _id: id });
+        if (!blogPost) {
+        res.status(404).json({ status: 404, message: "Blog post not found" });
+        } else {
+        res.status(200).json({ status: 200, message: blogPost });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ status: 500, message: "Internal server error" });
+    } finally {
+        client.close();
+    }
+};
+
+module.exports = { blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost, getBlogPostById};

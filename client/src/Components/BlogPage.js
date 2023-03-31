@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import GlobalStyle from "./GlobalStyles";
 import LoadingSpinner from "./LoadingSpinner";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
     fetch("/api/blogpost")
       .then((res) => res.json())
       .then((data) => {
-        setBlogPosts(data)
+        setBlogPosts(data);
         setIsLoading(false);
       })
       .catch((error) => console.error(error));
@@ -22,19 +23,23 @@ function BlogPage() {
     <>
       <Main>
         {isLoading ? (
-            <LoadingDiv><LoadingSpinner /></LoadingDiv>
+          <LoadingDiv>
+            <LoadingSpinner />
+          </LoadingDiv>
         ) : (
-        <ContentDiv>
-          {blogPosts.map((post) => (
-            <BlogDiv key={post.id}>
-              <PostContent>{post.content}</PostContent>
-              <Posttime>{post.date}</Posttime>
-            </BlogDiv>
-          ))}
-        </ContentDiv>
+          <ContentDiv>
+            {blogPosts.map((post, index) => (
+              <BlogDiv
+                key={post.id}
+                data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+              >
+                <PostContent>{post.content}</PostContent>
+                <Posttime>{post.date}</Posttime>
+              </BlogDiv>
+            ))}
+          </ContentDiv>
         )}
       </Main>
-      <GlobalStyle />
     </>
   );
 }
@@ -46,11 +51,10 @@ const Main = styled.div`
   flex-direction: column;
 `;
 
-
 const LoadingDiv = styled.div`
-display: flex;
-justify-content: center;
-`
+  display: flex;
+  justify-content: center;
+`;
 
 const ContentDiv = styled.div`
   display: flex;
@@ -66,11 +70,6 @@ const BlogDiv = styled.div`
   margin-bottom: 1em;
 `;
 
-const PostTitle = styled.h2`
-  font-size: 24px;
-  margin-bottom: 1em;
-`;
-
 const PostContent = styled.p`
   font-size: 18px;
   color: black;
@@ -80,5 +79,3 @@ const Posttime = styled.p`
   font-size: 12px;
   color: black;
 `;
-
-const NavDiv = styled.div``;
