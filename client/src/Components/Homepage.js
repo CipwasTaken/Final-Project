@@ -1,7 +1,7 @@
 import {NavLink} from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import GlobalStyle from "./GlobalStyles"
+
 import LoadingSpinner from "./LoadingSpinner"
 
 
@@ -16,9 +16,11 @@ useEffect(() => {
     fetch('/api/blogpost/recent')
         .then((res) => res.json())
         .then(data => {
+            console.log(data)
             setMostRecentPost(data.message[0]);
             setIsLoading(false);
         })
+
         .catch(error => console.error(error))
 }, [])
 
@@ -142,5 +144,3 @@ font-size: 15px;
 margin-top: 3em;
 justify-content: center;
 `
-
-const NavDiv = styled.div``

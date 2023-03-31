@@ -3,7 +3,7 @@
 const express = require("express");
 const morgan = require("morgan");
 
-const {blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost} = require("./handlers/blogpost")
+const {blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost, getBlogPostById} = require("./handlers/blogpost")
 
 const PORT = 4000;
 
@@ -27,6 +27,7 @@ express()
 
   .get("/api/blogpost/", getBlogPosts)
   .get("/api/blogpost/recent", getMostRecentPost)
+  .get("/api/blogpost/:_id", getBlogPostById) 
 
   .post("/api/blogpost/", blogPost)
 
