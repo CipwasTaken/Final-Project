@@ -20,7 +20,7 @@ const NavigationBar = () => {
             <Text>Home</Text>
           </div>
         </Nav>
-        <Nav>
+        <Nav to="/blog">
           <div>
             <Text>Blog</Text>
           </div>
@@ -64,7 +64,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   background-color: #7D6E83;
-  height: 5em;
+  height: 10vh;
 `;
 
 const Text = styled.p`
