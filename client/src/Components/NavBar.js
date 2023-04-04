@@ -5,7 +5,6 @@ import LogoutButton from "./LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoadingSpinner from "./LoadingSpinner";
 
-const name = "./Name.png"
 
 
 const NavigationBar = () => {
@@ -14,7 +13,7 @@ const NavigationBar = () => {
   return (
     <Container>
       <Wrapper>
-        <Img src={name} />
+        <Img src="/Name.png" alt="site name" />
         <Nav to="/">
           <div>
             <Text>Home</Text>

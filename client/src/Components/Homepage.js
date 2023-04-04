@@ -2,6 +2,7 @@ import {NavLink} from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 
+
 import LoadingSpinner from "./LoadingSpinner"
 
 
@@ -119,7 +120,6 @@ align-items: center;
 `
 
 const ImgDiv = styled.div`
-
 `
 
 const Img = styled.img`
