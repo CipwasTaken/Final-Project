@@ -104,7 +104,7 @@ const getBlogPostById = async (req, res) => {
     try {
         await client.connect();
         const db = client.db("LND");
-        const id = req.params.id;
+        const { id } = req.params;
         const blogPost = await db.collection("blogposts").findOne({ _id: id });
         if (!blogPost) {
         res.status(404).json({ status: 404, message: "Blog post not found" });

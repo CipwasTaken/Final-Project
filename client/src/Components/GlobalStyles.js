@@ -42,7 +42,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         line-height: 1;
         background-color: #F8EDE3;
-        font-family: 'Roboto', sans-serif;;
+        font-family: Roboto;
     }
     ol, ul {
         list-style: none;
