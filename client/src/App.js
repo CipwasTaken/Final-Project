@@ -4,11 +4,15 @@ import GlobalStyle from "./Components/GlobalStyles"
 import NavigationBar from "./Components/NavBar";
 import BlogPage from "./Components/BlogPage";
 import BlogPostPage from "./Components/Post";
+import AdminPage from "./Components/AdminPage";
+import { useContext } from "react";
+import { UserContext } from "./Components/UserContext";
 
 
 
 
 function App() {
+  const {isAdmin} = useContext(UserContext)
   return (
     <BrowserRouter>
     <GlobalStyle />
@@ -19,6 +23,11 @@ function App() {
       <Route path="/" element={<Home />}  />
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/blog/:id" element={<BlogPostPage />} />
+      {isAdmin ? (
+          <Route path="/admin" element={<AdminPage />} />
+        ) : (
+          <Route path="/admin" element={<Home />} />
+        )} 
     </Routes>
     
     </BrowserRouter>

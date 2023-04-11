@@ -4,12 +4,12 @@ import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoadingSpinner from "./LoadingSpinner";
-
-
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
 const NavigationBar = () => {
-  const {isLoading, error} = useAuth0;
-  
+  const { isLoading, error } = useAuth0();
+  const { isAdmin } = useContext(UserContext);
   return (
     <Container>
       <Wrapper>
@@ -29,9 +29,18 @@ const NavigationBar = () => {
           {!error && isLoading && <LoadingSpinner />}
           {!error && !isLoading && (
             <>
+            <Div>
+            {isAdmin && (
+                <Nav to="/admin">
+                  <div>
+                    <Text>Admin</Text>
+                  </div>
+                </Nav>
+              )}
               <LoginButton />
               <LogoutButton />
-            </>
+            </Div>
+          </>
           )}
           
         </Nav>
@@ -69,3 +78,8 @@ const Container = styled.div`
 const Text = styled.p`
   color: white;
 `;
+
+const Div = styled.div`
+display: flex;
+gap: 2em;
+`

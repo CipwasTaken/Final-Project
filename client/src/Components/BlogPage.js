@@ -5,45 +5,51 @@ import LoadingSpinner from "./LoadingSpinner";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-    function BlogPage() {
-    const [blogPosts, setBlogPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        AOS.init({ duration: 1000, once: true });
-        fetch("/api/blogpost")
-        .then((res) => res.json())
-        .then((data) => {
-            setBlogPosts(data);
-            setIsLoading(false);
-        })
-        .catch((error) => console.error(error));
-    }, []);
+function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    return (
-        <>
-        <Main>
-            {isLoading ? (
-            <LoadingDiv>
-                <LoadingSpinner />
-            </LoadingDiv>
-            ) : (
-            <ContentDiv>
-                {blogPosts.map((post, index) => (
-                    <Nav to={`/blog/${post._id}`} key={post.id}>
-                        <BlogDiv
-                            data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
-                        >
-                            <PostContent>{post.content}</PostContent>
-                            <Posttime>{post.date}</Posttime>
-                        </BlogDiv>
-                    </Nav>
-                ))}
-            </ContentDiv>
-            )}
-        </Main>
-        </>
-    );
+  const fetchBlogPosts = () => {
+    fetch("/api/blogpost/")
+      .then((res) => res.json())
+      .then((data) => {
+        setBlogPosts(data);
+        setIsLoading(false);
+      })
+      .catch((error) => console.error(error));
+  };
+
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+    fetchBlogPosts();
+  }, []);
+
+  return (
+    <>
+      <Main>
+        {isLoading ? (
+          <LoadingDiv>
+            <LoadingSpinner />
+          </LoadingDiv>
+        ) : (
+          <ContentDiv>
+            {blogPosts.map((post, index) => (
+              <Nav to={`/blog/${post._id}`} key={post.id}>
+                <BlogDiv
+                  data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+                >
+                  <PostContent>{post.content}</PostContent>
+                  <Posttime>{post.date}</Posttime>
+                </BlogDiv>
+              </Nav>
+            ))}
+          </ContentDiv>
+        )}
+      </Main>
+    </>
+  );
 }
 
 export default BlogPage;

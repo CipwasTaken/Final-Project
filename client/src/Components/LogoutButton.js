@@ -1,11 +1,17 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
+import { UserContext } from "./UserContext";
+import { useContext } from "react";
 
 function LogoutButton () {
     const { logout, isAuthenticated } = useAuth0();
+    const {setUserId, setIsAdmin} = useContext(UserContext)
     return (
         isAuthenticated &&(
-        <Button onClick={() => logout()}>
+        <Button onClick={() => {
+            setUserId(null)
+            setIsAdmin(false)
+            logout()}}>
             Sign Out
         </Button>
         )

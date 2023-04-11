@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 import LoadingSpinner from "./LoadingSpinner";
+import { UserContext } from "./UserContext";
 
 const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
@@ -9,6 +10,7 @@ const CommentSection = ({ postId }) => {
   const { isAuthenticated, user } = useAuth0();
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState(true)
+  const {isAdmin} = useContext(UserContext)
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -86,7 +88,7 @@ const CommentSection = ({ postId }) => {
                       <p> - {comment.date}</p>
                     </NameDate>
                     <div>{comment.content}</div>
-                    {isAuthenticated && user.name === comment.name && (
+                    {(isAdmin || (isAuthenticated && user.name === comment.name))  && (
                       <ButtonDiv>
                         {comment.editing ? (
                           <Form
