@@ -5,6 +5,7 @@ const morgan = require("morgan");
 
 const {blogPost, getBlogPosts, updateBlogPost, deleteBlogPost, getMostRecentPost, getBlogPostById} = require("./handlers/blogpost")
 const {postComment, getComments, editComment, deleteComment} = require("./handlers/comments")
+const {User, getUserInfo} = require("./handlers/users");
 
 const PORT = 4000;
 
@@ -30,9 +31,11 @@ express()
   .get("/api/blogpost/recent", getMostRecentPost)
   .get("/api/blogpost/:id", getBlogPostById) 
   .get("/api/comment/:postId", getComments)
+  .get("/api/user/:id", getUserInfo)
 
   .post("/api/blogpost/", blogPost)
   .post('/api/comment/:postId', postComment)
+  .post('/api/user/', User)
 
   .patch("/api/blogpost/:id", updateBlogPost)
   .patch("/api/comment/:commentId", editComment)

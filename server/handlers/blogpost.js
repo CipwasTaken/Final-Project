@@ -12,22 +12,28 @@ const {v4: uuidv4} = require('uuid')
 
 const blogPost = async (req, res) => {
     const client = new MongoClient(MONGO_URI, options);
-    try{
-        await client.connect()
-        const db = client.db("LND")
-        const _id = uuidv4();
-        const {content} = req.body;
-        const date = moment().format("YYYY-MM-DD, h:mm a")
-        const dateTime = moment().toISOString();
-        await db.collection("blogposts").insertOne({_id, content, date, dateTime})
-        res.status(200).json({status: 200, message: "Blog Post Created!"})
+  
+    try {
+      await client.connect();
+      const db = client.db("LND");
+      
+      // Get the logged in user's ID from the request
+      const userId = req.userId;
+
+
+      const _id = uuidv4();
+      const { content } = req.body;
+      const date = moment().format("YYYY-MM-DD, h:mm a");
+      const dateTime = moment().toISOString();
+      await db.collection("blogposts").insertOne({ _id, content, date, dateTime });
+      res.status(200).json({ status: 200, message: "Blog Post Created!" });
     } catch (err) {
-        console.log("Error:", err);
-        res.status(500).json({status: 500, message: "Internal server error"});
+      console.log("Error:", err);
+      res.status(500).json({ status: 500, message: "Internal server error" });
     } finally {
-        client.close()
+      client.close();
     }
-}
+  };
 
 const getBlogPosts = async (req, res) => {
 const client = new MongoClient(MONGO_URI, options);
@@ -47,6 +53,7 @@ try {
 
 const updateBlogPost = async (req, res) => {
     const client = new MongoClient(MONGO_URI, options);
+
 try {
     await client.connect();
     const db = client.db("LND");
@@ -68,6 +75,7 @@ try {
 
 const deleteBlogPost = async (req, res) => {
     const client = new MongoClient(MONGO_URI, options);
+
     try{
         
         await client.connect()

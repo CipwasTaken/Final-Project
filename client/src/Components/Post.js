@@ -25,7 +25,6 @@ return (
         {isLoading ? (
         <LoadingSpinner />
         ) : (
-        
         blogPost && (
         <>
             <BlogDiv>
